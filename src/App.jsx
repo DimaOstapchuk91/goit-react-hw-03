@@ -3,6 +3,7 @@ import ContactForm from './components/ContactForm/ContactForm';
 import ContactList from './components/ContactList/ContactList';
 import SearchBox from './components/SearchBox/SearchBox';
 import contactData from './components/data/contactData.json';
+import { nanoid } from 'nanoid';
 
 function App() {
   const [userContacts, setUserContacts] = useState(() => {
@@ -10,22 +11,20 @@ function App() {
       JSON.parse(window.localStorage.getItem('contactUser')) ?? contactData
     );
   });
-  const [filteredContacts, setFilteredContacts] = useState(contactData);
   const [serchUser, setSerchUser] = useState('');
 
-  useEffect(() => {
-    if (serchUser === '') {
-      setFilteredContacts(userContacts);
-    } else {
-      setFilteredContacts(prev =>
-        prev.filter(item => item.name.toLowerCase().includes(serchUser))
-      );
-    }
-  }, [serchUser, userContacts]);
+  const filteredContacts = userContacts.filter(item =>
+    item.name.toLowerCase().includes(serchUser)
+  );
 
   useEffect(() => {
     window.localStorage.setItem('contactUser', JSON.stringify(userContacts));
   }, [userContacts]);
+
+  const addContact = ({ values }) => {
+    console.log({ id: nanoid(), ...values });
+    setUserContacts(prev => [...prev, { id: nanoid(), ...values }]);
+  };
 
   const handleDeleteContactUser = id => {
     setUserContacts(prev => prev.filter(item => item.id !== id));
@@ -34,7 +33,7 @@ function App() {
   return (
     <>
       <h1 className='pageTitle'>Phonebook</h1>
-      <ContactForm setUserContacts={setUserContacts} />
+      <ContactForm addContact={addContact} />
       <SearchBox serchUser={serchUser} setSerchUser={setSerchUser} />
       <ContactList
         userContacts={filteredContacts}

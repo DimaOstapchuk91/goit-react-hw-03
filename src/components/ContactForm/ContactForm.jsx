@@ -1,13 +1,10 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import { nanoid } from 'nanoid';
 import * as Yup from 'yup';
 import s from './ContactForm.module.css';
 
-const ContactForm = ({ setUserContacts }) => {
-  const userId = nanoid();
-
+const ContactForm = ({ addContact }) => {
   const orderSchema = Yup.object({
-    username: Yup.string()
+    name: Yup.string()
       .min(3, 'Minimum 3 characters')
       .max(50, 'Maximum 50 characters')
       .required('Must be filled'),
@@ -19,29 +16,22 @@ const ContactForm = ({ setUserContacts }) => {
   });
 
   const handleForm = (values, options) => {
-    setUserContacts(prev => [
-      ...prev,
-      { id: userId, name: values.username, number: values.number },
-    ]);
+    addContact({ values });
     options.resetForm();
   };
 
   return (
     <div>
       <Formik
-        initialValues={{ username: '', number: '' }}
+        initialValues={{ name: '', number: '' }}
         onSubmit={handleForm}
         validationSchema={orderSchema}
       >
         <Form className={s.contactForm}>
           <label>
             Name
-            <Field className={s.formInput} name='username' />
-            <ErrorMessage
-              className={s.inputErr}
-              name='username'
-              component='p'
-            />
+            <Field className={s.formInput} name='name' />
+            <ErrorMessage className={s.inputErr} name='name' component='p' />
           </label>
           <label>
             Number
