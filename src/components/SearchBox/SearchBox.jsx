@@ -1,6 +1,6 @@
 import s from './SearchBox.module.css';
 
-const SearchBox = ({ serchUser, setSerchUser }) => {
+const SearchBox = ({ setSerchUser }) => {
   const handleSearchUser = event => {
     setSerchUser(event.target.value.toLowerCase());
   };
