@@ -22,7 +22,6 @@ function App() {
   }, [userContacts]);
 
   const addContact = ({ values }) => {
-    console.log({ id: nanoid(), ...values });
     setUserContacts(prev => [...prev, { id: nanoid(), ...values }]);
   };
 
